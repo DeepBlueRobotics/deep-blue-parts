@@ -12,7 +12,7 @@ class User < Sequel::Model
   HASH_BYTES = 24
   SALT_BYTES = 24
   PERMISSION_MAP = { "readonly" => "Read-only", "shoptech" => "Shop Tech", "editor" => "Editor", "admin" => "Administrator" }
-  THEMES = {"classic" => "Classic", "cyborg" => "Cyborg", "slate" => "Slate"}
+  THEMES = {"classic" => "Classic", "cyborg" => "Cyborg", "slate" => "Slate", "solarized-dark" => "Solarized (dark)", "solarized-light" => "Solarized (light)"}
   # Checks the given credentials against the database. Returns the user object on success and nil otherwise.
   def self.authenticate(email, password)
     user = User[:email => email]
