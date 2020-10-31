@@ -1,4 +1,14 @@
 <%= erb :header %>
+<script>
+$(function () {
+  $('#drawing-link-dialog').on('shown.bs.modal', function () {
+    $('#drawing-link-text').trigger('focus');
+  })
+  $('#drawing-link-dialog').on('hide.bs.modal', function () {
+    return $('#drawing-link-text')[0].reportValidity();
+  })
+})
+</script>
 <div class="container nav-sep">
   <h2>Edit Part</h2>
   <hr>
@@ -111,8 +121,18 @@
           <i class="mx-auto fas fa-ruler-combined fa-4x"></i>
         </div>
         <div class="row mt-4">
+        <label class="mx-auto btn btn-primary" data-toggle="modal" data-target="#drawing-link-dialog">
+            Link Drawing
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <i class="mx-auto fas fa-ruler-combined fa-4x"></i>
+        </div>
+        <div class="row mt-4">
           <label class="mx-auto btn btn-primary">
-            Attach Drawing <input type="file" style="display: none;" name="drawing" accept=".pdf">
+            Upload Drawing <input type="file" style="display: none;" name="drawing" accept=".pdf">
           </label>
         </div>
       </div>
@@ -122,7 +142,7 @@
         </div>
         <div class="row mt-4">
           <label class="mx-auto btn btn-primary">
-            Attach Documentation <input type="file" style="display: none;" name="documentation" accept=".pdf">
+            Upload Documentation <input type="file" style="display: none;" name="documentation" accept=".pdf">
           </label>
         </div>
       </div>
@@ -132,12 +152,12 @@
         </div>
         <div class="row mt-4">
           <label class="mx-auto btn btn-primary">
-            Attach DXF <input type="file" style="display: none;" name="toolpath" accept=".dxf">
+            Upload DXF <input type="file" style="display: none;" name="toolpath" accept=".dxf">
           </label>
         </div>
       </div>
     </div>
-	</fieldset>
+  </fieldset>
 <% end %>
   <div class="row mt-5">
     <div class="col-12">
@@ -145,5 +165,22 @@
     </div>
   </div>
 </div>
-
+<div id="drawing-link-dialog" class="modal" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Enter Drawing URL</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    <label>Drawing URL: <input id="drawing-link-text" type="url" name="drawing_url" onblur="reportValidity()"></label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+    </div>
+  </div>
+</div>
+</div>  
 <%= erb :footer %>

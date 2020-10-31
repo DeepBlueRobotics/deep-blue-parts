@@ -102,7 +102,12 @@
 <%if @part.drawing_created == 1 %>
         <tr>
           <td><b>Drawing Link</b></td>
+<%if File.file?("./uploads/"+ @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf") %>
           <td><a href="<%= "/uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf" %>">Revision <%= @part.rev %></a></td>
+<% end %>
+<%if File.file?("./uploads/"+ @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".url.txt") %>
+          <td><a href="<%= File.read("./uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".url.txt").strip %>">Revision <%= @part.rev %></a></td>
+<% end %>
         </tr>
 <% end %>
 <%if File.file?("./uploads/"+ @part.full_part_number + "/docs/" + @part.full_part_number + ".pdf") %>
@@ -160,7 +165,9 @@
     <div class="col-8 float-right">
 <%if @part.drawing_created == 1 %>
       <div class="embed-responsive embed-responsive-4by3">
-        <object class="embed-responsive-item" data="<%= "/uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf" %>" type="application/pdf"></object>
+<%if File.file?("./uploads/"+ @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf") %>
+      <object class="embed-responsive-item" data="<%= "/uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf" %>" type="application/pdf"></object>
+<% end %>
       </div>
 <% end %>
   </div>

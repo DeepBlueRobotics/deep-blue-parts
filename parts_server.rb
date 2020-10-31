@@ -405,6 +405,23 @@ module CheesyParts
           end
         end
 
+        if params[:drawing_url] != ""
+          # Create directories if they do not exist already
+          Dir.mkdir("./uploads/#{@part.full_part_number}") unless Dir.exist?("./uploads/#{@part.full_part_number}")
+          Dir.mkdir("./uploads/#{@part.full_part_number}/drawing") unless Dir.exist?("./uploads/#{@part.full_part_number}/drawing")
+          # File.delete("./uploads/#{@part.full_part_number}/drawing/#{@part.full_part_number+"_"+@part.increment_revision(@part.rev)}.pdf") if File.exist?("./uploads/#{@part.full_part_number}/drawing/#{@part.full_part_number+"_"+@part.increment_revision(@part.rev)}.pdf")
+          File.open("./uploads/#{@part.full_part_number}/drawing/#{@part.full_part_number+"_"+@part.increment_revision(@part.rev_history.split(",").last)}.url.txt", 'wb') do |f|
+            f.write(params[:drawing_url])
+          end
+          @part.rev = @part.increment_revision(@part.rev_history.split(",").last)
+          if @part.rev == "A"
+            @part.rev_history << @part.rev
+          else
+            @part.rev_history << ",#{@part.rev}"
+          end
+          @part.drawing_created = 1
+        end
+
         if params[:drawing]
           file = params[:drawing][:tempfile]
           # Create directories if they do not exist already
@@ -442,7 +459,7 @@ module CheesyParts
           halt(400, "Invalid finish type.") unless Part::FINISH_MAP.include?(params[:finish])
           @part.finish = params[:finish]
         end
-        @part.rev = params[:rev] if (params[:rev] && !params[:drawing])
+        @part.rev = params[:rev] if (params[:rev] && !params[:drawing] && (!params[:drawing_url] || params[:drawing_url]==""))
       end
       if @user.is_shoptech?
         @part.quantity = params[:quantity] if params[:quantity]
