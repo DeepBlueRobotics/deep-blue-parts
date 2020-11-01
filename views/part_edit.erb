@@ -44,7 +44,14 @@
       <input type="text" name="quantity" value="<%= @part.quantity %>" />
     </div>
     <% if @part.type != "cots" %>
-
+    <% if @part.project.cad_platform == "Onshape" %>
+    <div class="col">
+      <label class="float-right">Drawing Link</label>
+    </div>
+    <div class="col">
+      <input type="url" name="drawing_link" value="<%= @part.drawing_link %>" onblur="reportValidity(this)" />
+    </div>
+    <% else %>
     <div class="col">
       <label class="float-right">Reset Current Revision</label>
     </div>
@@ -57,6 +64,7 @@
         <% end %>
       </select>
     </div>
+    <% end %>
     <% end %>
   </div>
   <hr>
@@ -106,6 +114,7 @@
   <hr>
 	<fieldset>
     <div class="row">
+      <% if @part.project.cad_platform == "SOLIDWORKS" %>
       <div class="col">
         <div class="row">
           <i class="mx-auto fas fa-ruler-combined fa-4x"></i>
@@ -116,6 +125,7 @@
           </label>
         </div>
       </div>
+      <% end %>
       <div class="col">
         <div class="row">
           <i class="mx-auto far fa-file-alt fa-4x"></i>
