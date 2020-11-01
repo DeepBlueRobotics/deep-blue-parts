@@ -6,4 +6,9 @@
 class Project < Sequel::Model
   one_to_many :parts
   one_to_many :orders
+
+  CAD_PLATFORM_MAP = { 
+    "Onshape" => "Onshape",
+    "SOLIDWORKS" => "SOLIDWORKS"
+  }
 end

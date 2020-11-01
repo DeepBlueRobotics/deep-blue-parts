@@ -147,8 +147,11 @@ module CheesyParts
       # Check parameter existence and format.
       halt(400, "Missing project name.") if params[:name].nil?
       halt(400, "Missing part number prefix.") if params[:part_number_prefix].nil?
+      halt(400, "Missing CAD platform.") if params[:cad_platform].nil?
+      halt(400, "Invalid CAD platform.") unless Project::CAD_PLATFORM_MAP.include?(params[:cad_platform])
 
-      project = Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix], :hide_dashboards => 0)
+      project = Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix], :hide_dashboards => 0, 
+        :cad_platform => params[:cad_platform])
 
       redirect "/projects/#{project.id}"
     end
@@ -208,6 +211,11 @@ module CheesyParts
       @project.name = params[:name] if params[:name]
       if params[:part_number_prefix]
         @project.part_number_prefix = params[:part_number_prefix]
+      end
+
+      if params[:cad_platform]
+        halt(400, "Invalid CAD platform.") unless Project::CAD_PLATFORM_MAP.include?(params[:cad_platform])
+        @project.cad_platform = params[:cad_platform]
       end
 
       if params[:avatar]
@@ -420,6 +428,11 @@ module CheesyParts
           else
             @part.rev_history << ",#{@part.rev}"
           end
+          @part.drawing_created = 1
+        end
+
+        if params[:drawing_link]
+          @part.drawing_link = params[:drawing_link].strip
           @part.drawing_created = 1
         end
 

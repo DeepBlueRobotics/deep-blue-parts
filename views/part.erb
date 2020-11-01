@@ -61,7 +61,11 @@
         </tr>
         <tr>
           <td><b>Part Number</b></td>
+          <% if @part.drawing_created == 1 && @part.project.cad_platform == "Onshape" %>
+          <td><a href="<%= @part.drawing_link %>"><%= @part.full_part_number %></a></td>
+          <% else %>
           <td><%= @part.full_part_number %></td>
+          <% end %>
         </tr>
         <% if @part.type != "cots" %>
         <tr>
@@ -87,23 +91,25 @@
         <tr>
           <td><b>Quantity Required</b></td><td><%= @part.quantity %></td>
         </tr>
-        <% if @part.type != "cots" %>
+<% if @part.type != "cots" %>
 
         <tr>
 
           <td><b>Drawing Created?</b></td>
           <td><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td>
         </tr>
+  <%if @part.project.cad_platform == "SOLIDWORKS" %>
         <tr>
           <td><b>Revision Letter</b></td>
           <td><%= @part.rev %></td>
         </tr>
-        <% end %>
-<%if @part.drawing_created == 1 %>
+    <%if @part.drawing_created == 1 %>
         <tr>
           <td><b>Drawing Link</b></td>
           <td><a href="<%= "/uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf" %>">Revision <%= @part.rev %></a></td>
         </tr>
+    <% end %>
+  <% end %>
 <% end %>
 <%if File.file?("./uploads/"+ @part.full_part_number + "/docs/" + @part.full_part_number + ".pdf") %>
         <tr>
@@ -158,7 +164,7 @@
 <% end %>
     </div><!-- /col-4 -->
     <div class="col-8 float-right">
-<%if @part.drawing_created == 1 %>
+<%if @part.drawing_created == 1 && @part.project.cad_platform == "SOLIDWORKS" %>
       <div class="embed-responsive embed-responsive-4by3">
         <object class="embed-responsive-item" data="<%= "/uploads/" + @part.full_part_number + "/drawing/" + @part.full_part_number + "_" + @part.rev + ".pdf" %>" type="application/pdf"></object>
       </div>
